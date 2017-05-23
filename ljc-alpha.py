@@ -24,6 +24,93 @@ selected_results = []
 time = str(time())
 
 
+def active_var((index, benchmark, time):
+    a = ts.get_hist_data(benchmark)
+    a = pd.DataFrame(a)
+
+    a = a.reset_index()
+
+    # print(a)
+
+    b = ts.get_hist_data(index)
+    b = pd.DataFrame(b)
+    b = b.reset_index()
+    # print(b)
+
+
+
+
+    c = pd.merge(a, b, how='inner', on='date')
+    # x stands for benchmark
+    # y stands for index
+
+
+    df = c
+    price_change_benchmark = df['p_change_x']
+    price_change_index = df['p_change_y']
+
+    #active var
+    df['active_var']=price_change_index-price_change_benchmark
+
+    #probability
+    Var5 = np.percentile(df['p_change_y'], 5)
+    Var10 = np.percentile(df['p_change_y'], 10)
+    Var20=np.percentile(df['p_change_y'],20)
+    Var30=np.percentile(df['p_change_y'],30)
+    Var40=np.percentile(df['p_change_y'],40)
+    Var50=np.percentile(df['p_change_y'],50)
+    Var50=np.percentile(df['p_change_y'],60)
+    Var50=np.percentile(df['p_change_y'],70)
+    Var50=np.percentile(df['p_change_y'],80)
+    Var50=np.percentile(df['p_change_y'],90)
+
+
+
+
+    print(df['active_var'])
+
+    result = {'index': index, 'alpha': alpha, 'beta': beta, 'varance': varance_index, 'win_rate': win_rate,
+              'active_risk': active_risk, 'downside_risk': downside_risk, 'Var10': Var10, 'Var5': Var5,
+            'Var20':Var20,'Var30':Var30,'Var40':Var40,'Var50':Var50,'Var60':Var60,'Var70':Var70,'Var80':Var80,
+            'Var90':Var90,
+            'total_yield': total_yield_index, 'Daily_yield': Daily_yield_index, 'Annual_yield': Annual_yield_index,
+            'Max_withdraw': Max_withdraw, 'active_profit_daily': active_profit_daily,
+            'active_profit_annual': active_profit_annual, 'active_profit_total': active_profit_total}
+
+    selected_result = {
+        'index': index,
+
+        'alpha': alpha,
+
+        'beta': beta,
+
+        'varance': varance_index,
+
+        'win_rate': win_rate,
+
+        'active_risk': active_risk,
+
+        'downside_risk': downside_risk,
+
+        'Var10': Var10,
+
+        'total_yield': total_yield_index,
+
+        'Max_withdraw': Max_withdraw,
+
+        'active_profit_daily': active_profit_daily}
+
+    results.append(result)
+
+    selected_results.append(result)
+    # print("(",'"index":',index,',','"alpha":',a,',','"beta":',beta,')')
+    # print(results)
+    # print(c.iloc[i,20])
+
+
+    now_results = pd.DataFrame(results)
+
+
 def regress(index, benchmark, time):
     global remaining_min, remaining_min
     a = ts.get_hist_data(benchmark)
